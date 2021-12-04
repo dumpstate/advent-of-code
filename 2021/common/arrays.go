@@ -58,3 +58,50 @@ func SubSum(nums []int, start int, length int) int {
 func SumAll(nums []int) int {
 	return SubSum(nums[:], 0, len(nums))
 }
+
+func Subtract(first []int, second []int) []int {
+	var diff []int
+
+	for _, x := range first {
+		found := false
+
+		for _, y := range second {
+			if x == y {
+				found = true
+				break
+			}
+		}
+
+		if !found {
+			diff = append(diff, x)
+		}
+	}
+
+	return diff
+}
+
+func Contains(nums []int, val int) bool {
+	for _, num := range nums {
+		if num == val {
+			return true
+		}
+	}
+
+	return false
+}
+
+func Head(nums []int) int {
+	if len(nums) == 0 {
+		log.Fatal("Cannot take head of an empty array")
+	}
+
+	return nums[0]
+}
+
+func Last(nums []int) int {
+	if len(nums) == 0 {
+		log.Fatal("Cannot take last element of an empty array")
+	}
+
+	return nums[len(nums) - 1]
+}
