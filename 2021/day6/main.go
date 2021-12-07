@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strings"
 
 	"2021/common"
 )
@@ -29,13 +28,8 @@ func simulate(initialState []int, days int) int {
 }
 
 func main() {
-	lines := common.ReadLines("./.inputs/2021/6/input")
-	split := strings.Split(lines[0], ",")
-	state := make([]int, len(split))
-	for ix, value := range split {
-		state[ix] = common.StrToInt(value)
-	}
+	input := common.FirstLineAsInts("./.inputs/2021/6/input")
 
-	fmt.Println("Part I", simulate(state, 80))
-	fmt.Println("Part II", simulate(state, 256))
+	fmt.Println("Part I", simulate(input, 80))
+	fmt.Println("Part II", simulate(input, 256))
 }

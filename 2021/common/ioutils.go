@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"log"
 	"os"
+	"strings"
 )
 
 func ReadLines(path string) []string {
@@ -32,6 +33,18 @@ func ReadLinesAsInts(path string) []int {
 
 	for _, line := range lines {
 		ints = append(ints, StrToInt(line))
+	}
+
+	return ints
+}
+
+func FirstLineAsInts(path string) []int {
+	lines := ReadLines(path)
+	split := strings.Split(lines[0], ",")
+	ints := make([]int, len(split))
+
+	for ix, value := range split {
+		ints[ix] = StrToInt(value)
 	}
 
 	return ints

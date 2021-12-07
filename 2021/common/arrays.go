@@ -1,6 +1,9 @@
 package common
 
-import "log"
+import (
+	"log"
+	"math"
+)
 
 func Filter(nums []int, pred func(n int) bool) []int {
 	var res []int
@@ -103,5 +106,25 @@ func Last(nums []int) int {
 		log.Fatal("Cannot take last element of an empty array")
 	}
 
-	return nums[len(nums) - 1]
+	return nums[len(nums)-1]
+}
+
+func MinMax(nums []int) (int, int) {
+	if len(nums) == 0 {
+		panic("Cannot compute MinMax of an empty array")
+	}
+
+	min, max := math.MaxInt64, math.MinInt64
+
+	for _, num := range nums {
+		if num < min {
+			min = num
+		}
+
+		if num > max {
+			max = num
+		}
+	}
+
+	return min, max
 }
