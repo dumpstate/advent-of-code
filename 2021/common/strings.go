@@ -3,6 +3,7 @@ package common
 import (
 	"log"
 	"strconv"
+	"strings"
 )
 
 func StrToInt(str string) int {
@@ -12,4 +13,38 @@ func StrToInt(str string) int {
 	}
 
 	return value
+}
+
+func SubtractStr(str1 string, str2 string) string {
+	var unique []string
+
+	for _, char := range str1 {
+		if !strings.Contains(str2, string(char)) {
+			unique = append(unique, string(char))
+		}
+	}
+
+	return strings.Join(unique, "")
+}
+
+func IntersectStr(str1 string, str2 string) string {
+	var intersection []string
+
+	for _, char := range str1 {
+		if strings.Contains(str2, string(char)) {
+			intersection = append(intersection, string(char))
+		}
+	}
+
+	return strings.Join(intersection, "")
+}
+
+func ContainsInAnyOrder(str string, chars string) bool {
+	for _, char := range chars {
+		if !strings.Contains(str, string(char)) {
+			return false
+		}
+	}
+
+	return true
 }
