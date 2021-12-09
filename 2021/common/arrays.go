@@ -62,6 +62,16 @@ func SumAll(nums []int) int {
 	return SubSum(nums[:], 0, len(nums))
 }
 
+func Product(nums []int) int {
+	product := 1
+
+	for _, value := range nums {
+		product *= value
+	}
+
+	return product
+}
+
 func Subtract(first []int, second []int) []int {
 	var diff []int
 
