@@ -138,3 +138,14 @@ func MinMax(nums []int) (int, int) {
 
 	return min, max
 }
+
+func ReversedRunes(rs []rune) []rune {
+	total := len(rs)
+	reversed := make([]rune, total)
+
+	for ix, r := range rs {
+		reversed[total-ix-1] = r
+	}
+
+	return reversed
+}
