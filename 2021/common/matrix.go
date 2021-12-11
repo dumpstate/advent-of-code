@@ -43,6 +43,31 @@ func (mat *Matrix) Get(coord Coord) (int, error) {
 	return (*mat)[coord.Y()][coord.X()], nil
 }
 
+func (mat *Matrix) Find(pred func(coord Coord) bool) (Coord, bool) {
+	xDim, yDim := mat.Dimensions()
+
+	for x := 0; x < xDim; x++ {
+		for y := 0; y < yDim; y++ {
+			coord := [2]int{x, y}
+			if pred(coord) {
+				return coord, true
+			}
+		}
+	}
+
+	return [2]int{}, false
+}
+
+func (mat *Matrix) VisitAll(fn func(value *int)) {
+	xDim, yDim := mat.Dimensions()
+
+	for x := 0; x < xDim; x++ {
+		for y := 0; y < yDim; y++ {
+			fn(&(*mat)[y][x])
+		}
+	}
+}
+
 func (mat *Matrix) GetOrPanic(coord Coord) int {
 	value, err := (*mat).Get(coord)
 
@@ -70,4 +95,14 @@ func (mat *Matrix) Neighbors(coord Coord) []Coord {
 	}
 
 	return neighbors
+}
+
+func (mat *Matrix) Dimensions() (int, int) {
+	return len((*mat)[0]), len(*mat)
+}
+
+func (mat *Matrix) TotalEntries() int {
+	xDim, yDim := mat.Dimensions()
+
+	return xDim * yDim
 }
