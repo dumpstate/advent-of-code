@@ -4,6 +4,7 @@ import (
 	"log"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 func StrToInt(str string) int {
@@ -42,6 +43,16 @@ func IntersectStr(str1 string, str2 string) string {
 func ContainsInAnyOrder(str string, chars string) bool {
 	for _, char := range chars {
 		if !strings.Contains(str, string(char)) {
+			return false
+		}
+	}
+
+	return true
+}
+
+func IsLowerCased(str string) bool {
+	for _, char := range str {
+		if !unicode.IsLower(char) {
 			return false
 		}
 	}

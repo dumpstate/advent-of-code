@@ -103,6 +103,16 @@ func Contains(nums []int, val int) bool {
 	return false
 }
 
+func ContainsStr(arr []string, val string) bool {
+	for _, str := range arr {
+		if str == val {
+			return true
+		}
+	}
+
+	return false
+}
+
 func Head(nums []int) int {
 	if len(nums) == 0 {
 		log.Fatal("Cannot take head of an empty array")
@@ -148,4 +158,32 @@ func ReversedRunes(rs []rune) []rune {
 	}
 
 	return reversed
+}
+
+func FilterStr(arr []string, pred func(string) bool) []string {
+	filtered := make([]string, 0)
+
+	for _, str := range arr {
+		if pred(str) {
+			filtered = append(filtered, str)
+		}
+	}
+
+	return filtered
+}
+
+func MaxCountStr(arr []string) int {
+	countMap := make(map[string]int)
+	max := math.MinInt64
+
+	for _, str := range arr {
+		count := countMap[str] + 1
+		if count > max {
+			max = count
+		}
+
+		countMap[str] = count
+	}
+
+	return max
 }
