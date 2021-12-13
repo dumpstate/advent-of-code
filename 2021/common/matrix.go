@@ -2,6 +2,7 @@ package common
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 )
 
@@ -68,6 +69,18 @@ func (mat *Matrix) VisitAll(fn func(value *int)) {
 	}
 }
 
+func (mat *Matrix) Count(pred func(value int) bool) int {
+	total := 0
+
+	mat.VisitAll(func(next *int) {
+		if pred(*next) {
+			total++
+		}
+	})
+
+	return total
+}
+
 func (mat *Matrix) GetOrPanic(coord Coord) int {
 	value, err := (*mat).Get(coord)
 
@@ -105,4 +118,42 @@ func (mat *Matrix) TotalEntries() int {
 	xDim, yDim := mat.Dimensions()
 
 	return xDim * yDim
+}
+
+func (mat *Matrix) TruncatedByX(index int) *Matrix {
+	_, yDim := mat.Dimensions()
+	truncated := make(Matrix, yDim)
+
+	for y := 0; y < yDim; y++ {
+		truncated[y] = make([]int, index)
+
+		for x := 0; x < index; x++ {
+			truncated[y][x] = (*mat)[y][x]
+		}
+	}
+
+	return &truncated
+}
+
+func (mat *Matrix) TruncatedByY(index int) *Matrix {
+	truncated := make(Matrix, index)
+
+	for y := 0; y < index; y++ {
+		truncated[y] = (*mat)[y]
+	}
+
+	return &truncated
+}
+
+func (mat *Matrix) Print(valueMap map[int]string) {
+	xDim, yDim := mat.Dimensions()
+
+	for y := 0; y < yDim; y++ {
+		for x := 0; x < xDim; x++ {
+			value := mat.GetOrPanic([2]int{x, y})
+			fmt.Print(valueMap[value])
+		}
+
+		fmt.Println()
+	}
 }
