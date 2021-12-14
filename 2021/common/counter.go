@@ -1,5 +1,7 @@
 package common
 
+import "math"
+
 type Counter map[int]int
 
 func NewCounter(input []int) Counter {
@@ -20,4 +22,20 @@ func (counter *Counter) TotalCount() int {
 	}
 
 	return total
+}
+
+func (counter *Counter) MinMax() (int, int) {
+	min, max := math.MaxInt64, math.MinInt64
+
+	for _, freq := range *counter {
+		if freq > max {
+			max = freq
+		}
+
+		if freq < min {
+			min = freq
+		}
+	}
+
+	return min, max
 }
