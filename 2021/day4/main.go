@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"2021/common"
@@ -138,7 +139,7 @@ func runReverseBingo(input []int, boards []BingoBoard) int {
 }
 
 func main() {
-	input, boards := bingoBoards("./.inputs/2021/4/input")
+	input, boards := bingoBoards(os.Args[1])
 
 	fmt.Println("Part I", runBingo(input[:], boards[:]))
 	fmt.Println("Part II", runReverseBingo(input[:], boards[:]))

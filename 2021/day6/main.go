@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"2021/common"
 )
@@ -28,7 +29,7 @@ func simulate(initialState []int, days int) int {
 }
 
 func main() {
-	input := common.FirstLineAsInts("./.inputs/2021/6/input")
+	input := common.FirstLineAsInts(os.Args[1])
 
 	fmt.Println("Part I", simulate(input, 80))
 	fmt.Println("Part II", simulate(input, 256))

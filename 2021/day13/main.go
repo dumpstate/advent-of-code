@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"os"
 	"strings"
 
 	"2021/common"
@@ -107,7 +108,7 @@ func doFold(sheet *common.Matrix, fold Fold) *common.Matrix {
 }
 
 func main() {
-	dots, folds := parseInput("./.inputs/2021/13/input")
+	dots, folds := parseInput(os.Args[1])
 
 	sheet := asMatrix(dots[:])
 	sheet = doFold(sheet, folds[0])

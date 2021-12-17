@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"2021/common"
@@ -91,7 +92,7 @@ func countOverlapping(coords []Line, excludeDiagonal bool) int {
 }
 
 func main() {
-	input := common.ReadLines("./.inputs/2021/5/input")
+	input := common.ReadLines(os.Args[1])
 	lines := make([]Line, len(input))
 
 	for ix, inputStr := range input {

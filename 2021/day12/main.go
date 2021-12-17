@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"2021/common"
@@ -119,7 +120,7 @@ func countAllPaths(
 }
 
 func main() {
-	graph := NewGraph("./.inputs/2021/12/input")
+	graph := NewGraph(os.Args[1])
 
 	fmt.Println("Part I", countAllPaths(graph, "start", "end", isValid))
 	fmt.Println("Part II", countAllPaths(graph, "start", "end", extendedIsValid))

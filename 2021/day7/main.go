@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"os"
 
 	"2021/common"
 )
@@ -38,7 +39,7 @@ func minFuelCost(positions []int, costFn func(n int, p int) int) int {
 }
 
 func main() {
-	input := common.FirstLineAsInts("./.inputs/2021/7/input")
+	input := common.FirstLineAsInts(os.Args[1])
 
 	fmt.Println("Part I", minFuelCost(input[:], common.Abs))
 	fmt.Println("Part II", minFuelCost(input[:], fuelCost))

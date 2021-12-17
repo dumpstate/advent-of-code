@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"strings"
 
 	"2021/common"
@@ -65,7 +66,7 @@ func readCommands(path string) []Command {
 }
 
 func main() {
-	commands := readCommands("./.inputs/2021/2/input")
+	commands := readCommands(os.Args[1])
 
 	x1, y1 := navigateSubSimple(commands[:])
 	x2, y2 := navigateSub(commands[:])

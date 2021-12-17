@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"2021/common"
 )
@@ -77,7 +78,7 @@ func simultaneousFlash(octopuses common.Matrix) int {
 }
 
 func main() {
-	path := "./.inputs/2021/11/input"
+	path := os.Args[1]
 	octopuses1 := common.NewMatrix(path, "")
 	octopuses2 := common.NewMatrix(path, "")
 

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"os"
 	"strings"
 
 	"2021/common"
@@ -126,7 +127,7 @@ func deduceAll(entries []Entry) int {
 }
 
 func main() {
-	lines := common.ReadLines("./.inputs/2021/8/input")
+	lines := common.ReadLines(os.Args[1])
 	entries := make([]Entry, len(lines))
 	for ix, line := range lines {
 		entries[ix] = NewEntry(line)

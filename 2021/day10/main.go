@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"sort"
 
 	"2021/common"
@@ -97,7 +98,7 @@ func totalCompletionScore(lines []string) int {
 }
 
 func main() {
-	lines := common.ReadLines("./.inputs/2021/10/input")
+	lines := common.ReadLines(os.Args[1])
 
 	fmt.Println("Part I", illegalSyntaxScore(lines[:]))
 	fmt.Println("Part II", totalCompletionScore(lines[:]))

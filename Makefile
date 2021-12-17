@@ -1,3 +1,5 @@
+INPUT := ../.inputs/$(year)/$(day)/$(or $(input), input)
+
 run:
 ifndef year
 	$(error year is undefined)
@@ -10,5 +12,5 @@ ifeq ($(year), 2021)
 		echo "Input already downloaded." ||\
 		./fetch_input.sh $(year) $(day)
 
-	go run $(year)/day$(day)/main.go
+	cd 2021 && go run day$(day)/main.go $(INPUT) && cd ..
 endif

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 
 	"2021/common"
@@ -175,7 +176,7 @@ func decode(binary string) (int, int, int) {
 }
 
 func main() {
-	code := common.ReadLines("./.inputs/2021/16/input")[0]
+	code := common.ReadLines(os.Args[1])[0]
 	version, value, _ := decode(toBinary(code))
 
 	fmt.Println("Part I", version)

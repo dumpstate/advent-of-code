@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"os"
 	"strings"
 
 	"2021/common"
@@ -114,7 +115,7 @@ func countAll(area Area) int {
 }
 
 func main() {
-	area := NewArea("./.inputs/2021/17/input")
+	area := NewArea(os.Args[1])
 
 	fmt.Println("Part I", findMaxY(area))
 	fmt.Println("Part II", countAll(area))

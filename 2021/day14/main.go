@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"2021/common"
@@ -70,7 +71,7 @@ func simulate(template string, rules *map[string]rune, steps int) int {
 }
 
 func main() {
-	template, rules := parse("./.inputs/2021/14/input")
+	template, rules := parse(os.Args[1])
 
 	fmt.Println("Part I", simulate(template, &rules, 10))
 	fmt.Println("Part II", simulate(template, &rules, 40))

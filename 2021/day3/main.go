@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"strconv"
 	"strings"
 
@@ -123,7 +124,7 @@ func lifeSupportRating(lines []string) int64 {
 }
 
 func main() {
-	binaryNums := common.ReadLines("./.inputs/2021/3/input")
+	binaryNums := common.ReadLines(os.Args[1])
 
 	fmt.Println("Part I:", powerConsumption(binaryNums[:]))
 	fmt.Println("Part II:", lifeSupportRating(binaryNums[:]))

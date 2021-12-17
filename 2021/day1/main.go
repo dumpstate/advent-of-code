@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"2021/common"
 )
@@ -31,7 +32,7 @@ func part2(nums []int) int {
 }
 
 func main() {
-	nums := common.ReadLinesAsInts("./.inputs/2021/1/input")
+	nums := common.ReadLinesAsInts(os.Args[1])
 
 	fmt.Println("Part I:", part1(nums[:]))
 	fmt.Println("Part II:", part2(nums[:]))

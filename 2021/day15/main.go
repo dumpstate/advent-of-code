@@ -4,6 +4,7 @@ import (
 	"container/heap"
 	"fmt"
 	"math"
+	"os"
 
 	"2021/common"
 )
@@ -153,7 +154,7 @@ func resized(graph common.Matrix, times int) common.Matrix {
 }
 
 func main() {
-	riskLevels := common.NewMatrix("./.inputs/2021/15/input", "")
+	riskLevels := common.NewMatrix(os.Args[1], "")
 
 	sizeX, sizeY := riskLevels.Dimensions()
 	source, sink := [2]int{0, 0}, [2]int{sizeX - 1, sizeY - 1}

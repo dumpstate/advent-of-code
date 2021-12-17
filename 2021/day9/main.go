@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"sort"
 
 	"2021/common"
@@ -77,7 +78,7 @@ func targetBasinsProduct(points common.Matrix) int {
 }
 
 func main() {
-	points := common.NewMatrix("./.inputs/2021/9/input", "")
+	points := common.NewMatrix(os.Args[1], "")
 
 	fmt.Println("Part I", riskLevel(points[:]))
 	fmt.Println("Part II", targetBasinsProduct(points[:]))
