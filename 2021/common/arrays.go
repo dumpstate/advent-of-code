@@ -149,6 +149,18 @@ func MinMax(nums []int) (int, int) {
 	return min, max
 }
 
+func Max(nums []int) int {
+	_, max := MinMax(nums[:])
+
+	return max
+}
+
+func Min(nums []int) int {
+	min, _ := MinMax(nums[:])
+
+	return min
+}
+
 func ReversedRunes(rs []rune) []rune {
 	total := len(rs)
 	reversed := make([]rune, total)
@@ -186,4 +198,18 @@ func MaxCountStr(arr []string) int {
 	}
 
 	return max
+}
+
+func Cartesian(nums [3]int) [][3]int {
+	res := make([][3]int, 0)
+
+	for a := 0; a < 3; a++ {
+		for b := 0; b < 3; b++ {
+			for c := 0; c < 3; c++ {
+				res = append(res, [3]int{nums[a], nums[b], nums[c]})
+			}
+		}
+	}
+
+	return res
 }
