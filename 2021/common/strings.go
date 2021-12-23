@@ -59,3 +59,7 @@ func IsLowerCased(str string) bool {
 
 	return true
 }
+
+func Update(str string, ix int, value rune) string {
+	return str[0:ix] + string(value) + str[ix+1:]
+}
