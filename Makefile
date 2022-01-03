@@ -10,6 +10,9 @@ endif
 	[ -f "./.inputs/$(year)/$(day)/input" ] &&\
 		echo "Input already downloaded." ||\
 		./fetch_input.sh $(year) $(day)
+ifeq ($(year), 2019)
+	cd 2019 && guile -e main -l common.scm -s day$(day).scm $(INPUT) && cd ..
+endif
 ifeq ($(year), 2020)
 	cd 2020 && python3 day$(day).py $(INPUT) && cd ..
 endif
