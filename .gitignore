@@ -1,3 +1,6 @@
 __pycache__/
 .inputs/
 .cookie
+.idea/
+.vscode/
+.metals/

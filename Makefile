@@ -19,3 +19,6 @@ endif
 ifeq ($(year), 2021)
 	cd 2021 && go run day$(day)/main.go $(INPUT) && cd ..
 endif
+ifeq ($(year), 2022)
+	cd 2022 && scala ./day$(day).scala $(INPUT) && cd ..
+endif
