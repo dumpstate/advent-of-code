@@ -1,47 +1,78 @@
 import scala.collection.mutable
 import scala.io.Source
 
-def valvesFromInput(input: String) = Source.fromFile(input).getLines
+type Layout = Map[String, (Int, List[String])]
+
+def layoutFromInput(input: String) = Source.fromFile(input).getLines
     .map(line =>
         val split = line.split("; ")
         val valve = split(0).substring(6, 8)
         val flowRate = split(0).substring(23).toInt
         val valves = split(1).substring(22).trim.split(", ")
-        (valve, flowRate, valves.toList)).toList
+        (valve -> (flowRate, valves.toList))).toMap
 
-class Layout(val flowRates: Map[String, Int], val links: Map[String, List[String]]):
-    def flow(valve: String) = flowRates(valve)
-    def neighbours(valve: String) = links(valve)
+def distance(layout: Layout, from: String, to: String): Int =
+    val visited = mutable.HashSet[String]()
+    var queue = mutable.Queue[String](from)
+    var dist = 0
 
-object Layout:
-    def from(valves: List[(String, Int, List[String])]) =
-        new Layout(valves.map(v => (v._1, v._2)).toMap, valves.map(v => (v._1, v._3)).toMap)
+    while queue.nonEmpty do
+        val nextQueue = mutable.Queue[String]()
 
-def memoized[T, R](fn: (Layout, T) => R) =
-    val cache = mutable.HashMap[T, R]()
-    (layout: Layout, state: T) =>
-        val res = cache.getOrElse(state, fn(layout, state))
-        cache.put(state, res)
-        res
+        for valve <- queue do
+            if !visited.contains(valve) then
+                visited.add(valve)
 
-def maxFlow(layout: Layout, state: (String, Set[String], Int)): Int = state match
-    case (_, _, timeLeft) if timeLeft <= 0 => 0
-    case (current, open, _) if open.contains(current) => 0
-    case (current, open, timeLeft) if layout.flow(current) == 0 =>
-        layout.neighbours(current)
-            .map(n => memoMaxFlow(layout, (n, open, timeLeft - 1))).max
-    case (current, open, timeLeft) =>
-        val ps = (timeLeft - 1) * layout.flow(current)
-        layout.neighbours(current)
-            .map(n => Math.max(
-                ps + memoMaxFlow(layout, (n, open + current, timeLeft - 2)),
-                memoMaxFlow(layout, (n, open, timeLeft - 1)))).max
+                if valve == to then
+                    return dist
+                else
+                    nextQueue.enqueueAll(layout(valve)._2)
 
-val memoMaxFlow = memoized(maxFlow)
+        queue = nextQueue
+        dist += 1
 
-def partI(layout: Layout, time: Int) = memoMaxFlow(layout, ("AA", Set(), time))
+    throw new Exception("path does not exist")
+
+def next(layout: Layout, nonEmptyValves: Layout, current: String, timeLeft: Int): (String, Int) =
+    nonEmptyValves.flatMap { case (valve, (flowRate, _)) =>
+        val remNonEmpty = nonEmptyValves.removed(valve)
+        val remTime = timeLeft - distance(layout, current, valve) - 1
+        if remTime <= 0 then None
+        else Some((valve, remTime * flowRate + next(layout, remNonEmpty, valve, remTime)._2))
+    }.maxByOption(_._2).getOrElse((current, 0))
+
+def nonEmpty(layout: Layout) = layout.filter { case (_, (flowRate, _)) => flowRate > 0 }
+
+def iterPairs[T](set: Set[T]) =
+    val items = set.toVector
+
+    for (
+        a <- (0 until items.length).iterator;
+        b <- (a + 1 until items.length).iterator
+    ) yield (items(a), items(b))
+
+def score(layout: Layout, set: Set[String]) = iterPairs(set).map(p => distance(layout, p._1, p._2)).sum
+def score(layout: Layout, l: Set[String], r: Set[String]): Int = score(layout, l) + score(layout, r)
+
+def split(layout: Layout) =
+    val valves = nonEmpty(layout).keySet
+    valves.subsets
+        .map(l => List(l, valves.removedAll(l)))
+        .map(st => (st, score(layout, st(0), st(1))))
+        .toVector.sortBy(_._2).head._1
+
+def maxFlow(layout: Layout, nonEmpty: Layout, start: String, timeLeft: Int) = next(layout, nonEmpty, start, timeLeft)._2
+
+def pick(layout: Layout, keys: Set[String]) = layout.removedAll(layout.keySet -- keys)
+
+def partI(layout: Layout) = maxFlow(layout, nonEmpty(layout), "AA", 30)
+def partII(layout: Layout) = split(layout)
+    .map(pick(layout, _))
+    .map(maxFlow(layout, _, "AA", 26))
+    .sum
 
 @main def main(input: String) =
-    val layout = Layout.from(valvesFromInput(input))
+    val layout = layoutFromInput(input)
 
-    println(f"Part I: ${partI(layout, 30)}")
+    println(s"Part I: ${partI(layout)}")
+    println(s"Part II: ${partII(layout)}")
