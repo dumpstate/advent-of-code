@@ -22,3 +22,6 @@ endif
 ifeq ($(year), 2022)
 	cd 2022 && scala ./day$(day).scala $(INPUT) && cd ..
 endif
+ifeq ($(year), 2023)
+	cd 2023 && npm run build && node ./build/day$(day).js $(INPUT) && cd ..
+endif

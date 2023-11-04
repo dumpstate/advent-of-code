@@ -1,0 +1,24 @@
+{
+	"name": "aoc-2023",
+	"version": "0.1.0",
+	"description": "Advent of Code 2023",
+	"engines": {
+		"node": ">=18"
+	},
+	"scripts": {
+		"build": "npx tsc && npx prettier --write ."
+	},
+	"author": "Albert Sadowski <asadowski@mailbox.org>",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/node": "^20.8.10",
+		"prettier": "^3.0.3",
+		"typescript": "^5.2.2"
+	},
+	"prettier": {
+		"endOfLine": "lf",
+		"semi": false,
+		"tabWidth": 4,
+		"useTabs": true
+	}
+}
