@@ -12,6 +12,10 @@ export function sum(ns: number[]): number {
 	return ns.reduce((acc, val) => acc + val, 0)
 }
 
+export function product(ns: number[]): number {
+	return ns.reduce((acc, val) => acc * val, 1)
+}
+
 export function isDigit(c: string): boolean {
 	return c >= "0" && c <= "9"
 }
