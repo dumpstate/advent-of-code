@@ -39,3 +39,18 @@ export function last<T>(ts: T[]): T {
 
 	return ts[ts.length - 1]
 }
+
+export function adjacentIx<T>(board: T[][], x: number, y: number): number[][] {
+	return [
+		[x - 1, y],
+		[x + 1, y],
+		[x, y - 1],
+		[x, y + 1],
+		[x - 1, y - 1],
+		[x + 1, y - 1],
+		[x - 1, y + 1],
+		[x + 1, y + 1],
+	].filter(
+		([x, y]) => x >= 0 && x < board[0].length && y >= 0 && y < board.length,
+	)
+}
