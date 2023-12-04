@@ -54,3 +54,8 @@ export function adjacentIx<T>(board: T[][], x: number, y: number): number[][] {
 		([x, y]) => x >= 0 && x < board[0].length && y >= 0 && y < board.length,
 	)
 }
+
+export function intersection<T>(l: T[], r: T[]): Set<T> {
+	const lSet = new Set(l)
+	return new Set(r.filter((val) => lSet.has(val)))
+}
