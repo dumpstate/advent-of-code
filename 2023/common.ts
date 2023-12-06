@@ -64,3 +64,7 @@ export function intersection<T>(l: T[], r: T[]): Set<T> {
 	const lSet = new Set(l)
 	return new Set(r.filter((val) => lSet.has(val)))
 }
+
+export function zip<T, U>(l: T[], r: U[]): [T, U][] {
+	return l.map((val, i) => [val, r[i]])
+}
