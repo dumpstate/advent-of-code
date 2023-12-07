@@ -68,3 +68,22 @@ export function intersection<T>(l: T[], r: T[]): Set<T> {
 export function zip<T, U>(l: T[], r: U[]): [T, U][] {
 	return l.map((val, i) => [val, r[i]])
 }
+
+export function counter<T>(items: T[]): Map<T, number> {
+	const counts = new Map<T, number>()
+	for (const item of items) {
+		counts.set(item, (counts.get(item) || 0) + 1)
+	}
+	return counts
+}
+
+export function keyOfMaxValue<T>(m: Map<string, T>): string {
+	const keys = m.keys()
+	let maxKey = keys.next().value
+	for (const key of keys) {
+		if ((m.get(key) as any) > (m.get(maxKey) as any)) {
+			maxKey = key
+		}
+	}
+	return maxKey
+}

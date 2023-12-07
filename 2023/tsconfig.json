@@ -14,7 +14,6 @@
 		"noImplicitThis": false,
 		"alwaysStrict": true,
 
-		"noUnusedLocals": true,
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
 		"noPropertyAccessFromIndexSignature": true,
