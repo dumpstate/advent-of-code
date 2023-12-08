@@ -87,3 +87,19 @@ export function keyOfMaxValue<T>(m: Map<string, T>): string {
 	}
 	return maxKey
 }
+
+export function gcd(a: number, b: number): number {
+	if (a < b) {
+		;[a, b] = [b, a]
+	}
+	const r = a % b
+	return r ? gcd(b, r) : b
+}
+
+export function lcm(a: number, b: number): number {
+	return (a / gcd(a, b)) * b
+}
+
+export function lcmAll(ns: number[]): number {
+	return ns.reduce(lcm)
+}
