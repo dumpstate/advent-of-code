@@ -65,6 +65,13 @@ export function intersection<T>(l: T[], r: T[]): Set<T> {
 	return new Set(r.filter((val) => lSet.has(val)))
 }
 
+export function intersectAll<T>(...arrays: T[][]): Set<T> {
+	return arrays.reduce(
+		(acc, arr) => intersection(Array.from(acc), arr),
+		new Set<T>(arrays[0]),
+	)
+}
+
 export function zip<T, U>(l: T[], r: U[]): [T, U][] {
 	return l.map((val, i) => [val, r[i]])
 }
@@ -102,4 +109,8 @@ export function lcm(a: number, b: number): number {
 
 export function lcmAll(ns: number[]): number {
 	return ns.reduce(lcm)
+}
+
+export function deepClone<T>(v: T): T {
+	return JSON.parse(JSON.stringify(v))
 }
