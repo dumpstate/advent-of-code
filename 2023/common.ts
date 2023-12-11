@@ -114,3 +114,11 @@ export function lcmAll(ns: number[]): number {
 export function deepClone<T>(v: T): T {
 	return JSON.parse(JSON.stringify(v))
 }
+
+export function getSize<T>(board: T[][]): [number, number] {
+	return [board[0].length, board.length]
+}
+
+export function l1(a: [number, number], b: [number, number]): number {
+	return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1])
+}
