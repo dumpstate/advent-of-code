@@ -122,3 +122,12 @@ export function getSize<T>(board: T[][]): [number, number] {
 export function l1(a: [number, number], b: [number, number]): number {
 	return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1])
 }
+
+export function findIx<T>(items: T[], item: T): number {
+	for (let i = 0; i < items.length; i++) {
+		if (items[i] === item) {
+			return i
+		}
+	}
+	return -1
+}
