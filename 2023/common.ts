@@ -131,3 +131,15 @@ export function findIx<T>(items: T[], item: T): number {
 	}
 	return -1
 }
+
+export function transpose<T>(items: T[][]): T[][] {
+	const [width, height] = getSize(items)
+	const transposed: T[][] = []
+	for (let x = 0; x < width; x++) {
+		transposed.push([])
+		for (let y = 0; y < height; y++) {
+			transposed[x].push(items[y][x])
+		}
+	}
+	return transposed
+}
