@@ -20,9 +20,9 @@ function tilt(board: string[][]) {
 }
 
 function rotate(board: string[][]): string[][] {
-	const rotated = Array(board.length)
+	const rotated = Array(board[0].length)
 		.fill(null)
-		.map(() => Array(board[0].length).fill(null))
+		.map(() => Array(board.length).fill(null))
 	for (let j = 0; j < board.length; j++) {
 		for (let i = 0; i < board[0].length; i++) {
 			rotated[i][board.length - 1 - j] = board[j][i]
