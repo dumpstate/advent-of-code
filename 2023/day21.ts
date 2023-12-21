@@ -58,6 +58,25 @@ function countSteps(
 	return count
 }
 
+function partII(board: string[][]) {
+	const [width, height] = getSize(board)
+	if (width != height)
+		throw new Error("Board must be square for part II to work")
+	const xs = []
+	let i = 0
+	while (xs.length < 3) {
+		if (i % width === Math.floor(width / 2)) xs.push(i)
+		i += 1
+	}
+
+	const [y0, y1, y2] = xs.map((steps) =>
+		countSteps(input, steps, start(input)),
+	)
+	const polynomial = (n: number) =>
+		y0 + (y1 - y0) * n + ((y2 - 2 * y1 + y0) * n * (n - 1)) / 2
+	return polynomial(Math.floor(26501365 / width))
+}
+
 const input = getLines().map((l) => l.split(""))
 console.log("Part I", countSteps(input, 64, start(input)))
-console.log("Part II", countSteps(input, 26501365, start(input)))
+console.log("Part II", partII(input))
