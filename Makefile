@@ -1,4 +1,5 @@
 INPUT := ../.inputs/$(year)/$(day)/$(or $(input), input)
+TMP_DIR := /tmp
 
 run:
 ifndef year
@@ -24,4 +25,11 @@ ifeq ($(year), 2022)
 endif
 ifeq ($(year), 2023)
 	cd 2023 && npm run build && node ./build/day$(day).js $(INPUT) && cd ..
+endif
+ifeq ($(year), 2024)
+	cd 2024 && \
+	rm -rf $(TMP_DIR)/day$(day) && \
+	rustc day$(day).rs -o $(TMP_DIR)/day$(day) && \
+	$(TMP_DIR)/day$(day) $(INPUT) && \
+	cd ..
 endif
