@@ -29,7 +29,7 @@ endif
 ifeq ($(year), 2024)
 	cd 2024 && \
 	rm -rf $(TMP_DIR)/day$(day) && \
-	rustc day$(day).rs -o $(TMP_DIR)/day$(day) && \
+	rustc -A dead_code day$(day).rs -o $(TMP_DIR)/day$(day) && \
 	$(TMP_DIR)/day$(day) $(INPUT) && \
 	cd ..
 endif
