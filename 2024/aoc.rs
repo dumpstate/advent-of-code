@@ -25,6 +25,13 @@ pub fn input_lines() -> Vec<String> {
     read_lines(&args.path)
 }
 
+pub fn input_board() -> Vec<Vec<char>> {
+    input_lines()
+        .iter()
+        .map(|line| line.chars().collect())
+        .collect()
+}
+
 pub fn counter(vec: &Vec<i32>) -> HashMap<i32, i32> {
     vec.iter()
         .fold(HashMap::new(), |mut map, i| {
