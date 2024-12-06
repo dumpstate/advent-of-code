@@ -40,3 +40,18 @@ pub fn counter(vec: &Vec<i32>) -> HashMap<i32, i32> {
             map
         })
 }
+
+pub fn find(board: &Vec<Vec<char>>, c: char) -> (i32, i32) {
+    for y in 0..board.len() {
+        for x in 0..board[0].len() {
+            if board[y][x] == c {
+                return (x as i32, y as i32);
+            }
+        }
+    }
+    panic!("character not found");
+}
+
+pub fn is_on_board(board: &Vec<Vec<char>>, x: i32, y: i32) -> bool {
+    x >= 0 && y >= 0 && y < board.len() as i32 && x < board[0].len() as i32
+}
