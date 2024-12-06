@@ -27,7 +27,7 @@ fn next_dir(dir_x: i32, dir_y: i32) -> (i32, i32) {
     }
 }
 
-fn traverse(board: &Vec<Vec<char>>) -> (i32, bool) {
+fn traverse(board: &Vec<Vec<char>>) -> (HashSet<(i32, i32)>, bool) {
     let (mut pos_x, mut pos_y) = find(&board, '^');
     let (mut dir_x, mut dir_y) = (0, -1);
     let mut visited = HashSet::new();
@@ -36,7 +36,7 @@ fn traverse(board: &Vec<Vec<char>>) -> (i32, bool) {
     while is_on_board(&board, pos_x, pos_y) {
         let px = ((pos_x, pos_y), (dir_x, dir_y));
         if visited.contains(&px) {
-            return (path.len() as i32, true);
+            return (path, true);
         }
         visited.insert(px);
 
@@ -53,30 +53,27 @@ fn traverse(board: &Vec<Vec<char>>) -> (i32, bool) {
         }
     }
 
-    (path.len() as i32, false)
+    (path, false)
 }
 
 fn part_1(board: &Vec<Vec<char>>) -> i32 {
-    let (count, _) = traverse(board);
-    count
+    let (path, _) = traverse(board);
+    path.len() as i32
 }
 
 fn part_2(board: &Vec<Vec<char>>) -> i32 {
     let mut b = board.clone();
     let mut count = 0;
+    let (path, _) = traverse(&b);
 
-    for y in 0..b.len() {
-        for x in 0..b[0].len() {
-            if b[y][x] != '.' {
-                continue;
-            }
-
-            b[y][x] = '#';
+    for (x, y) in path.iter() {
+        if b[*y as usize][*x as usize] == '.' {
+            b[*y as usize][*x as usize] = '#';
             let (_, found_cycle) = traverse(&b);
             if found_cycle {
                 count += 1;
             }
-            b[y][x] = '.';
+            b[*y as usize][*x as usize] = '.';
         }
     }
 
