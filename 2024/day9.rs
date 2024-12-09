@@ -39,7 +39,7 @@ fn lsize(disk_map: &Vec<Option<usize>>, ix: usize) -> usize {
     size
 }
 
-fn next_space(disk_map: &Vec<Option<usize>>, ix: usize) -> (usize, usize) {
+fn next_space(disk_map: &Vec<Option<usize>>, ix: usize) -> Option<(usize, usize)> {
     let mut i = ix;
     while i < disk_map.len() && disk_map[i].is_none() {
         i += 1;
@@ -47,7 +47,10 @@ fn next_space(disk_map: &Vec<Option<usize>>, ix: usize) -> (usize, usize) {
     while i < disk_map.len() && disk_map[i].is_some() {
         i += 1;
     }
-    (i, lsize(disk_map, i))
+    match i {
+        j if j == ix => None,
+        _ => Some((i, lsize(disk_map, i))),
+    }
 }
 
 fn find_id(disk_map: &Vec<Option<usize>>, id: usize) -> usize {
@@ -63,36 +66,25 @@ fn find_id(disk_map: &Vec<Option<usize>>, id: usize) -> usize {
 }
 
 fn compress_whole(disk_map: &mut Vec<Option<usize>>) {
-    let mut id = disk_map.iter().max().unwrap().unwrap();
-
-    loop {
+    for id in (0..=disk_map.iter().max().unwrap().unwrap()).rev() {
         let ix = find_id(disk_map, id);
-        let size = lsize(disk_map, ix);
-
-        let (mut l_ix, mut found) = (0, false);
+        let (size, mut l) = (lsize(disk_map, ix), None);
         loop {
-            let (next_l_ix, next_size) = next_space(disk_map, l_ix);
-            if next_size >= size {
-                found = true;
-                l_ix = next_l_ix;
-                break;
+            match next_space(disk_map, l.unwrap_or(0)) {
+                Some((next_l, next_size)) if next_size >= size => {
+                    l = Some(next_l);
+                    break;
+                }
+                Some((next_l, _)) => l = Some(next_l),
+                None => break,
             }
-            if next_l_ix == l_ix {
-                break;
-            }
-            l_ix = next_l_ix;
         }
 
-        if found && l_ix < ix {
+        if l.is_some() && l.unwrap() < ix {
             for i in 0..size {
-                disk_map.swap(ix + i, l_ix + i);
+                disk_map.swap(ix + i, l.unwrap() + i);
             }
         }
-
-        if id == 0 {
-            break;
-        }
-        id -= 1;
     }
 }
 
@@ -107,15 +99,9 @@ fn checksum(disk_map: &Vec<Option<usize>>) -> i64 {
         .sum()
 }
 
-fn part_1(input: &Vec<usize>) -> i64 {
-    let mut expanded = expand(input);
-    compress(&mut expanded);
-    checksum(&expanded)
-}
-
-fn part_2(input: &Vec<usize>) -> i64 {
-    let mut expanded = expand(input);
-    compress_whole(&mut expanded);
+fn compress_and_checksum(disk_map: &Vec<usize>, cmpr: fn(&mut Vec<Option<usize>>)) -> i64 {
+    let mut expanded = expand(disk_map);
+    cmpr(&mut expanded);
     checksum(&expanded)
 }
 
@@ -125,6 +111,6 @@ fn main() {
         .map(|x| x.to_digit(10).unwrap() as usize)
         .collect::<Vec<usize>>();
 
-    println!("Part I: {}", part_1(input));
-    println!("Part II: {}", part_2(&input));
+    println!("Part I: {}", compress_and_checksum(&input, compress));
+    println!("Part II: {}", compress_and_checksum(&input, compress_whole));
 }
