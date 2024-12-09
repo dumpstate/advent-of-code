@@ -1,39 +1,27 @@
 mod aoc;
 
 fn expand(disk_map: &Vec<usize>) -> Vec<Option<usize>> {
-    let mut expanded = Vec::new();
-    let mut next_space = false;
-    let mut next_id = 0;
-
-    for c in disk_map.iter() {
-        if next_space {
-            for _ in 0..*c {
-                expanded.push(None);
-            }
-            next_id += 1;
-        } else {
-            for _ in 0..*c {
-                expanded.push(Some(next_id));
-            }
-        }
-        next_space = !next_space;
-    }
-
-    expanded
+    disk_map
+        .iter()
+        .fold(
+            (Vec::<Option<usize>>::new(), false, 0),
+            |(res, next_space, id), c| match next_space {
+                true => ([res, vec![None; *c]].concat(), false, id),
+                false => ([res, vec![Some(id); *c]].concat(), true, id + 1),
+            },
+        )
+        .0
 }
 
 fn compress(disk_map: &mut Vec<Option<usize>>) {
     let (mut l_ix, mut r_ix) = (0, disk_map.len() - 1);
-
     while l_ix < r_ix {
         while disk_map[l_ix].is_some() {
             l_ix += 1;
         }
-
         while disk_map[r_ix].is_none() {
             r_ix -= 1;
         }
-
         while l_ix < r_ix && disk_map[l_ix].is_none() && disk_map[r_ix].is_some() {
             disk_map.swap(l_ix, r_ix);
             l_ix += 1;
@@ -44,36 +32,34 @@ fn compress(disk_map: &mut Vec<Option<usize>>) {
 
 fn lsize(disk_map: &Vec<Option<usize>>, ix: usize) -> usize {
     let (mut size, mut i) = (0, ix);
-
     while i < disk_map.len() && disk_map[i] == disk_map[ix] {
         size += 1;
         i += 1;
     }
-
     size
 }
 
 fn next_space(disk_map: &Vec<Option<usize>>, ix: usize) -> (usize, usize) {
     let mut i = ix;
-
     while i < disk_map.len() && disk_map[i].is_none() {
         i += 1;
     }
-
     while i < disk_map.len() && disk_map[i].is_some() {
         i += 1;
     }
-
     (i, lsize(disk_map, i))
 }
 
 fn find_id(disk_map: &Vec<Option<usize>>, id: usize) -> usize {
-    disk_map.iter().enumerate().find(|(_, x)| {
-        match x {
+    disk_map
+        .iter()
+        .enumerate()
+        .find(|(_, x)| match x {
             Some(y) => *y == id,
-            None => false
-        }
-    }).unwrap().0
+            None => false,
+        })
+        .unwrap()
+        .0
 }
 
 fn compress_whole(disk_map: &mut Vec<Option<usize>>) {
@@ -111,12 +97,14 @@ fn compress_whole(disk_map: &mut Vec<Option<usize>>) {
 }
 
 fn checksum(disk_map: &Vec<Option<usize>>) -> i64 {
-    disk_map.iter().enumerate().map(|(ix, id)| {
-        match id {
+    disk_map
+        .iter()
+        .enumerate()
+        .map(|(ix, id)| match id {
             Some(x) => *x as i64 * ix as i64,
-            None => 0
-        }
-    }).sum()
+            None => 0,
+        })
+        .sum()
 }
 
 fn part_1(input: &Vec<usize>) -> i64 {
@@ -132,8 +120,11 @@ fn part_2(input: &Vec<usize>) -> i64 {
 }
 
 fn main() {
-    let input = &aoc::input_lines()[0].chars().map(|x| x.to_digit(10).unwrap() as usize).collect::<Vec<usize>>();
+    let input = &aoc::input_lines()[0]
+        .chars()
+        .map(|x| x.to_digit(10).unwrap() as usize)
+        .collect::<Vec<usize>>();
 
-    println!("Part I: {}", part_1(&input));
+    println!("Part I: {}", part_1(input));
     println!("Part II: {}", part_2(&input));
 }
