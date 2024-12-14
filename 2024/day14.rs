@@ -38,9 +38,22 @@ fn quadrant(pos: (i64, i64)) -> Option<usize> {
     }
 }
 
-fn main() {
-    let input = parse(&aoc::input_lines());
-    let part_1 = input
+fn max_tile(input: &Vec<Robot>, time: i64) -> i64 {
+    input
+        .iter()
+        .map(|r| pos(*r, time))
+        .fold(HashMap::new(), |mut acc, p| {
+            *acc.entry(p).or_insert(0) += 1;
+            acc
+        })
+        .values()
+        .max()
+        .unwrap()
+        .clone()
+}
+
+fn part_1(input: &Vec<Robot>) -> i64 {
+    input
         .iter()
         .map(|r| pos(*r, 100))
         .flat_map(|p| quadrant(p))
@@ -49,6 +62,20 @@ fn main() {
             acc
         })
         .into_iter()
-        .fold(1, |acc, (_, count)| acc * count);
-    println!("Part I: {}", part_1);
+        .fold(1, |acc, (_, count)| acc * count)
+}
+
+fn part_2(input: &Vec<Robot>) -> i64 {
+    for i in 0..1000000 {
+        if max_tile(input, i) == 1 {
+            return i;
+        }
+    }
+    panic!("No solution found");
+}
+
+fn main() {
+    let input = parse(&aoc::input_lines());
+    println!("Part I: {}", part_1(&input));
+    println!("Part II: {}", part_2(&input));
 }
