@@ -55,3 +55,7 @@ pub fn find(board: &Vec<Vec<char>>, c: char) -> (i32, i32) {
 pub fn is_on_board<T>(board: &Vec<Vec<T>>, x: i32, y: i32) -> bool {
     x >= 0 && y >= 0 && y < board.len() as i32 && x < board[0].len() as i32
 }
+
+pub fn split(s: &str, delim: &str) -> Vec<String> {
+    s.split(delim).map(String::from).collect()
+}
