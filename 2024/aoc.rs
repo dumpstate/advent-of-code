@@ -1,15 +1,18 @@
+use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::env;
 use std::fs::read_to_string;
 use std::path::PathBuf;
 
 pub struct Args {
-    pub path: PathBuf
+    pub path: PathBuf,
 }
 
 pub fn parse_args() -> Args {
     let input = env::args().nth(1).expect("no path given");
-    Args { path: PathBuf::from(input) }
+    Args {
+        path: PathBuf::from(input),
+    }
 }
 
 pub fn read_lines(fname: &PathBuf) -> Vec<String> {
@@ -33,12 +36,11 @@ pub fn input_board() -> Vec<Vec<char>> {
 }
 
 pub fn counter(vec: &Vec<i32>) -> HashMap<i32, i32> {
-    vec.iter()
-        .fold(HashMap::new(), |mut map, i| {
-            let count = map.entry(*i).or_insert(0);
-            *count += 1;
-            map
-        })
+    vec.iter().fold(HashMap::new(), |mut map, i| {
+        let count = map.entry(*i).or_insert(0);
+        *count += 1;
+        map
+    })
 }
 
 pub fn find(board: &Vec<Vec<char>>, c: char) -> (i32, i32) {
@@ -58,4 +60,31 @@ pub fn is_on_board<T>(board: &Vec<Vec<T>>, x: i32, y: i32) -> bool {
 
 pub fn split(s: &str, delim: &str) -> Vec<String> {
     s.split(delim).map(String::from).collect()
+}
+
+pub fn print_board(board: &Vec<Vec<char>>) {
+    for y in 0..board.len() {
+        println!("{}", board[y].iter().collect::<String>());
+    }
+}
+
+#[derive(Copy, Clone, Eq, PartialEq)]
+pub struct State {
+    pub pos: (usize, usize),
+    pub cost: i64,
+}
+
+impl Ord for State {
+    fn cmp(&self, other: &Self) -> Ordering {
+        other
+            .cost
+            .cmp(&self.cost)
+            .then_with(|| self.pos.cmp(&other.pos))
+    }
+}
+
+impl PartialOrd for State {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
 }
