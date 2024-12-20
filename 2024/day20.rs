@@ -1,92 +1,48 @@
-use std::collections::BinaryHeap;
-use std::collections::HashMap;
-use std::collections::HashSet;
+use std::collections::VecDeque;
 mod aoc;
 
-fn dijkstra(board: &Vec<Vec<char>>, start: (usize, usize)) -> Vec<Vec<i64>> {
+fn count_paths(board: &Vec<Vec<char>>, tunnel_len: i64) -> usize {
+    let start = aoc::find(&board, 'S');
+    let (sx, sy) = (start.0 as usize, start.1 as usize);
+    let mut q = VecDeque::new();
     let mut dist = vec![vec![std::i64::MAX; board[0].len()]; board.len()];
-    let mut heap = BinaryHeap::new();
+    let mut best_path = None;
 
-    dist[start.1][start.0] = 0;
-    heap.push(aoc::State {
-        pos: start,
-        cost: 0,
-    });
+    dist[sy][sx] = 0;
+    q.push_back(((sx, sy), 0, vec![(sx, sy)]));
 
-    while let Some(aoc::State { cost, pos }) = heap.pop() {
-        if dist[pos.1][pos.0] < cost {
-            continue;
-        }
-
-        for (dx, dy) in &[(-1, 0), (1, 0), (0, -1), (0, 1)] {
-            let (nx, ny) = ((pos.0 as i32 + dx) as usize, (pos.1 as i32 + dy) as usize);
-            if !aoc::is_on_board(board, nx as i32, ny as i32) || board[ny][nx] == '#' {
-                continue;
-            }
-            if dist[ny][nx] > cost + 1 {
-                heap.push(aoc::State {
-                    pos: (nx, ny),
-                    cost: cost + 1,
-                });
-                dist[ny][nx] = cost + 1;
-            }
-        }
-    }
-
-    dist
-}
-
-fn part_1(board: &mut Vec<Vec<char>>) -> usize {
-    let (sx, sy) = aoc::find(board, 'S');
-    let start = (sx as usize, sy as usize);
-    let distances = dijkstra(board, start);
-
-    let mut cheats: HashMap<i64, HashSet<((usize, usize), (usize, usize))>> = HashMap::new();
-    let mut q = vec![start];
-
-    while let Some((x, y)) = q.pop() {
+    while let Some(((x, y), c, path)) = q.pop_front() {
         if board[y][x] == 'E' {
+            best_path = Some(path);
             break;
         }
 
-        for (dx, dy) in &[(-1, 0), (1, 0), (0, -1), (0, 1)] {
+        for (dx, dy) in [(-1, 0), (1, 0), (0, -1), (0, 1)] {
             let (nx, ny) = ((x as i32 + dx) as usize, (y as i32 + dy) as usize);
-            if !aoc::is_on_board(board, nx as i32, ny as i32) {
+            if !aoc::is_on_board(&board, nx as i32, ny as i32) || board[ny][nx] == '#' {
                 continue;
             }
-            if board[ny][nx] == '#' {
-                for (d2x, d2y) in &[(-1, 0), (1, 0), (0, -1), (0, 1)] {
-                    let (nx2, ny2) = ((nx as i32 + d2x) as usize, (ny as i32 + d2y) as usize);
-                    if !aoc::is_on_board(board, nx2 as i32, ny2 as i32) ||
-                        (nx2, ny2) == (x, y) ||
-                        board[ny2][nx2] == '#' {
-                        continue;
-                    }
-
-                    let saved_cost = distances[ny2][nx2] - distances[y][x] - 2;
-                    if saved_cost > 0 {
-                        cheats.entry(saved_cost).or_insert(HashSet::new()).insert(((nx, ny), (nx2, ny2)));
-                    }
-                }
-                continue;
-            }
-            if distances[ny][nx] == distances[y][x] + 1 {
-                q.push((nx, ny));
+            if dist[ny][nx] > c + 1 {
+                dist[ny][nx] = c + 1;
+                q.push_back(((nx, ny), c + 1, path.iter().cloned().chain(std::iter::once((nx, ny))).collect()));
             }
         }
     }
 
-    let mut count = 0;
-    for (cost, tunnels) in cheats.iter() {
-        if *cost >= 100 {
-            count += tunnels.len();
-        }
-    }
-    count
+    let path = best_path.clone().unwrap();
+    path.iter().flat_map(|a| path.iter().map(move |b| (a, b)))
+        .filter(|(a, b)| a != b)
+        .filter(|((ax, ay), (bx, by))| {
+            let tunnel_dist = (*ax as i64 - *bx as i64).abs() + (*ay as i64 - *by as i64).abs();
+            let saved_cost = dist[*by][*bx] - dist[*ay][*ax] - tunnel_dist;
+            tunnel_dist <= tunnel_len && saved_cost >= 100
+        })
+        .count()
 }
 
-fn main() {
-    let mut board = aoc::input_board();
 
-    println!("Part I: {}", part_1(&mut board));
+fn main() {
+    let board = aoc::input_board();
+    println!("Part I: {}", count_paths(&board, 2));
+    println!("Part II: {}", count_paths(&board, 20));
 }
