@@ -88,3 +88,15 @@ impl PartialOrd for State {
         Some(self.cmp(other))
     }
 }
+
+pub fn join(v: &Vec<Vec<char>>) -> String {
+    v.iter().map(|cs| { cs.iter().collect::<String>() }).collect()
+}
+
+pub fn concat(mut v: Vec<char>, mut h: Vec<char>, mut a: Vec<char>) -> Vec<char> {
+    let mut res = Vec::new();
+    res.append(&mut v);
+    res.append(&mut h);
+    res.append(&mut a);
+    res
+}
