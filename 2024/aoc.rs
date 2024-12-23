@@ -100,3 +100,9 @@ pub fn concat(mut v: Vec<char>, mut h: Vec<char>, mut a: Vec<char>) -> Vec<char>
     res.append(&mut a);
     res
 }
+
+pub fn append(v: &Vec<String>, item: String) -> Vec<String> {
+    let mut res = v.clone();
+    res.push(item);
+    res
+}
